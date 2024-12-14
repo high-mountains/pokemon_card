@@ -14,8 +14,27 @@
   }
 }
 
+html {
+  font-size: calc(100vw / 1440);
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 16rem;
+}
+
+#header {
+  max-width: 1440px;
+  background-color: #2a0fdd;
+  margin: 0 auto;
+  z-index: 2;
+}
+
+main {
+  max-width: 1440px;
+  background-color: #bee373;
+  margin: 0 auto;
+  position: relative;
 }
