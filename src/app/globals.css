@@ -17,6 +17,22 @@
 html {
   font-size: calc(100vw / 1440);
 }
+@media screen and (max-width: 1024px) {
+  html {
+    font-size: calc(100vw / 1024);
+  } 
+} 
+@media screen and (max-width: 768px) {
+  html {
+    font-size: calc(100vw / 768);
+  } 
+} 
+@media screen and (max-width: 425px) {
+  html {
+    font-size: calc(100vw / 425);
+  } 
+} 
+
 
 body {
   color: var(--foreground);
@@ -34,7 +50,7 @@ body {
 
 main {
   max-width: 1440px;
-  background-color: #bee373;
+  /* background-color: #bee373; */
   margin: 0 auto;
   position: relative;
 

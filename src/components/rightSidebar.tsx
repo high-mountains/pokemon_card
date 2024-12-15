@@ -29,7 +29,7 @@ const viewToday = new Date().getFullYear() + "-" + (new Date().getMonth() + 1);
 export default function RightSidebar() {
   return (
     // <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-    <div className="h-auto w-auto bg-white shadow-lg overflow-y-auto right-0 top-0 flex flex-col gap-[14rem]">
+    <div className="h-auto w-auto bg-white shadow-lg overflow-y-auto right-0 top-0 flex flex-col gap-[8rem] px-[16rem] tablet:block hidden">
       <h3 className="bg-red-400 mt-[20rem]">検索条件</h3>
 
       <div>
