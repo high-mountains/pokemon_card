@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import { useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
 
 import Card from "@/components/card"
 import TimePeriod from "@/components/timePeriod"
@@ -9,9 +10,9 @@ import LeftSidebar from "@/components/leftSidebar";
 import RightSidebar from "@/components/rightSidebar";
 
 export default function Page() {
-  const market = useSelector((state) => state.cardSlice.market);
-  const totalTickets = useSelector((state) => state.cardSlice.totalTickets);
-  const selectedTickets = useSelector((state) => state.cardSlice.selectedTickets);
+  const market = useSelector((state: RootState) => state.cardSlice.market);
+  const totalTickets = useSelector((state: RootState) => state.cardSlice.totalTickets);
+  const selectedTickets = useSelector((state: RootState) => state.cardSlice.selectedTickets);
 
   useEffect(() => {
     console.log("market--->", market);

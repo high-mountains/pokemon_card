@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 
 import { Provider } from 'react-redux'; // Import the Provider
-import store from '../store/store';
+import { store } from '@/store/store';
 import "./globals.css";
 import Header from "@/components/header";
 
