@@ -6,7 +6,7 @@ export default function Page() {
   return (
     <>
       <LeftSidebar />
-      <div className="mb-[30rem]">
+      <div className="mb-[30rem] w-auto grow" >
         <Card />
         <Card />
         <Card />

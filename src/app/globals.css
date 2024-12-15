@@ -37,4 +37,8 @@ main {
   background-color: #bee373;
   margin: 0 auto;
   position: relative;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
