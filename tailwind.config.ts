@@ -15,13 +15,13 @@ export default {
     },
     screens: {
       'sp': '426px',
-      // => @media (min-width: 425px) { ... }
-      'tablet': '769px',
-      // => @media (min-width: 425px) { ... }
-      'laptop': '1025px',
-      // => @media (min-width: 425px) { ... }
-      'desktop': '1441px',
-      // => @media (min-width: 425px) { ... }
+      // => @media (min-width: 426px) { ... }
+      'tablet': '768px',
+      // => @media (min-width: 769px) { ... }
+      'laptop': '1024px',
+      // => @media (min-width: 1025px) { ... }
+      'desktop': '1440px',
+      // => @media (min-width: 1441px) { ... }
     }
   },
   plugins: [],

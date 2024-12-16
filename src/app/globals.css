@@ -1,3 +1,4 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap'); */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,25 +15,38 @@
   }
 }
 
-html {
-  font-size: calc(100vw / 1440);
+:root {
+  /* font-family: 'Noto Sans JP', sans-serif; */
 }
+
+html {
+  font-size: 1px;
+  box-sizing: border-box;
+}
+
 @media screen and (max-width: 1024px) {
   html {
     font-size: calc(100vw / 1024);
-  } 
-} 
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  html {
+    font-size: calc(100vw / 1024);
+  }
+}
+
 @media screen and (max-width: 768px) {
   html {
     font-size: calc(100vw / 768);
   } 
-} 
+}
+
 @media screen and (max-width: 425px) {
   html {
     font-size: calc(100vw / 425);
   } 
 } 
-
 
 body {
   color: var(--foreground);
@@ -42,14 +56,14 @@ body {
 }
 
 #header {
-  max-width: 1440px;
-  background-color: #2a0fdd;
+  max-width: 1024px;
   margin: 0 auto;
   z-index: 2;
+  height: 40rem;
 }
 
 main {
-  max-width: 1440px;
+  max-width: 1024px;
   /* background-color: #bee373; */
   margin: 0 auto;
   position: relative;
@@ -57,4 +71,16 @@ main {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.showMe {
+  display: flex;
+  transition: all 0.3s ease-in-out;
+  /* right: 0; */
+}
+
+.hiddenMe {
+  display: none;
+  transition: all 0.3s ease-in-out;
+  transform: translateX(100%);
 }

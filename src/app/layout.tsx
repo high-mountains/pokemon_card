@@ -9,7 +9,7 @@ import Header from "@/components/header";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
-      <html lang="en">
+      <html lang="jp">
         <body>
           <Header />
           <main>
