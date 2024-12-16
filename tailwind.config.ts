@@ -13,6 +13,16 @@ export default {
         foreground: "var(--foreground)",
       },
     },
+    screens: {
+      'sp': '426px',
+      // => @media (min-width: 426px) { ... }
+      'tablet': '768px',
+      // => @media (min-width: 769px) { ... }
+      'laptop': '1024px',
+      // => @media (min-width: 1025px) { ... }
+      'desktop': '1440px',
+      // => @media (min-width: 1441px) { ... }
+    }
   },
   plugins: [],
 } satisfies Config;
