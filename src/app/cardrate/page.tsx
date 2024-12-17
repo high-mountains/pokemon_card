@@ -1,27 +1,19 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "@/store/store";
-import { Chart } from "@/components/chart";
 import { FaSearch } from "react-icons/fa";
 import { setSearchOpen } from "@/store/slices/cardSlice";
 import { DatePicker, Select, Space } from "antd";
 import { SelectValue } from "antd/es/select";
 
-import dayjs from "dayjs";
-
 // ==================SHADCN=================
-import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts";
 
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
 } from "../../components/ui/card";
 
 import {
@@ -34,17 +26,15 @@ import {
 
 import CustomCard from "@/components/card";
 import TimePeriod from "@/components/timePeriod";
-import LeftSidebar from "@/components/leftSidebar";
-import RightSidebar from "@/components/rightSidebar";
 import CardWrapper from "@/components/cardWrapper";
 
 const chartData = [
-    { month: "January", desktop: 186 },
-    { month: "February", desktop: 305 },
-    { month: "March", desktop: 237 },
-    { month: "April", desktop: 73 },
-    { month: "May", desktop: 209 },
-    { month: "June", desktop: 214 },
+    { month: "ACESPEC", desktop: 86 },
+    { month: "ポケモン", desktop: 60 },
+    { month: "グッズ", desktop: 37 },
+    { month: "どうぐ", desktop: 73 },    
+    { month: "サポート", desktop: 54 },
+    { month: "ポケモン", desktop: 14 },
 ];
   const chartConfig = {
     desktop: {
@@ -70,7 +60,6 @@ export default function Page() {
     };
     return (
         <>
-            {/* <LeftSidebar /> */}
             <div className="mb-[30rem] w-auto grow md:bg-red-400 px-[16rem] flex flex-col gap-[14rem]">
                 <div className="flex flex-col">
                     <h3 className="text-[24rem]">検索条件</h3>
@@ -83,9 +72,6 @@ export default function Page() {
             tablet:flex
             gap-[8rem] px-[8rem] py-[16rem] transition-all duration-300 w-full`}
                         >
-                            {/* <h3 className="mt-[20rem] text-[24rem] font-bold">
-                                検索条件
-                            </h3> */}
                             <div className="flex flex-col tablet:flex-row tablet:gap-[8rem] gap-[6rem]">
                                 <div className="flex flex-row gap-[8rem]">
                                     <div className="flex flex-row items-center  gap-[8rem]">
@@ -93,12 +79,9 @@ export default function Page() {
                                             開始日:
                                         </p>
                                         <DatePicker
-                                            // presets={rangePresets}
                                             picker="date"
                                             className="tablet:w-[136rem] w-[120rem]"
-                                            // onChange={}
                                             allowClear={false}
-                                            // defaultValue={dayjs(viewToday)}
                                         />
                                     </div>
 
@@ -107,12 +90,9 @@ export default function Page() {
                                             終了日:
                                         </p>
                                         <DatePicker
-                                            // presets={rangePresets}
                                             picker="date"
                                             className="tablet:w-[136rem] w-[120rem]"
-                                            // onChange={}
                                             allowClear={false}
-                                            // defaultValue={dayjs(viewToday)}
                                         />
                                     </div>
                                 </div>
@@ -156,7 +136,7 @@ export default function Page() {
                                                 //   { value: '全て', label: '全て' },
                                                 {
                                                     value: "オープン",
-                                                    label: "オープン",
+                                                    label: "���ープン",
                                                 },
                                                 {
                                                     value: "マスタ",
@@ -199,7 +179,7 @@ export default function Page() {
                                                 },
                                                 {
                                                     value: "ネイティオ",
-                                                    label: "ネイティオ",
+                                                    label: "ネイテ��オ",
                                                 },
                                                 //   { value: 'disabled', label: 'Disabled', disabled: true },
                                             ]}
@@ -210,6 +190,7 @@ export default function Page() {
                         </div>
                     </div>
                 </div>
+                
                 <div>
                     <div className="flex items-center justify-between mb-[4rem]">
                         <p className="text-[24rem]">カード採用率</p>
@@ -230,22 +211,13 @@ export default function Page() {
                     </p>
                 </div>
 
-                {/*  */}
-
-                <div>
+                <div className="flex flex-col items-center justify-center">
                     <Card>
-                        <CardHeader>
-                            <CardTitle>Bar Chart</CardTitle>
-                            <CardDescription>
-                                {/* <p className="text-[16rem]"> */}
-                                    January - June 2024
-                                {/* </p> */}
-                            </CardDescription>
-                        </CardHeader>
                         <CardContent>
-                            {/* <ChartContainer> */}
                             <ChartContainer config={chartConfig}>
                                 <BarChart
+                                    width={600}
+                                    height={350}
                                     accessibilityLayer={true}
                                     data={chartData}
                                 >
@@ -256,29 +228,34 @@ export default function Page() {
                                         tickMargin={10}
                                         axisLine={false}
                                         tickFormatter={(value) =>
-                                            value.slice(0, 3)
+                                            value.slice(0, value.length)
                                         }
                                     />
+                                    <YAxis 
+                                        domain={[0, 100]} // Set min and max values: [min, max]
+                                        axisLine={false}
+                                        tickLine={false}
+                                    />
                                     <ChartTooltip>
-                                        <ChartTooltipContent hideLabel />
+                                        <ChartTooltipContent />
                                     </ChartTooltip>
                                     <Bar
                                         dataKey="desktop"
-                                        fill="var(--color-desktop)"
+                                        // fill="var(--color-desktop)"
+                                        fill={chartConfig.desktop.color} 
                                         radius={8}
-                                    />
+                                    >
+                                        <LabelList
+                                            position="top"
+                                            offset={12}
+                                            className="fill-foreground"
+                                            fontSize={12}
+                                            fontWeight={600}
+                                        />
+                                    </Bar>
                                 </BarChart>
                             </ChartContainer>
                         </CardContent>
-                        <CardFooter className="flex-col items-start gap-2 text-sm">
-                            <div className="flex gap-2 font-medium leading-none">
-                                Trending up by 5.2% this month{" "}
-                                <TrendingUp className="h-4 w-4" />
-                            </div>
-                            <div className="leading-none text-muted-foreground">
-                                Showing total visitors for the last 6 months
-                            </div>
-                        </CardFooter>
                     </Card>
                 </div>
 
@@ -313,7 +290,7 @@ export default function Page() {
                     />
                     <CustomCard
                         imgURL="./03.png"
-                        description="シ��クレットボックス(ACE SPEC)"
+                        description="シークレットボックス(ACE SPEC)"
                     />
                     <CustomCard
                         imgURL="./03.png"
@@ -343,8 +320,31 @@ export default function Page() {
                     <CustomCard imgURL="./dummy1.png" />
                     <CustomCard imgURL="./dummy1.png" />
                 </CardWrapper>
+
+                <CardWrapper headerTitle="グッズ">
+                    <CustomCard imgURL="./goods.png" />
+                    <CustomCard imgURL="./goods.png" />
+                    <CustomCard imgURL="./goods.png" />
+                    <CustomCard imgURL="./goods.png" />
+                    <CustomCard imgURL="./goods.png" />
+                </CardWrapper>
+
+                <CardWrapper headerTitle="どうぐ">
+                    <CustomCard imgURL="./dogs.png" />
+                    <CustomCard imgURL="./dogs.png" />
+                    <CustomCard imgURL="./dogs.png" />
+                    <CustomCard imgURL="./dogs.png" />
+                    <CustomCard imgURL="./dogs.png" />
+                </CardWrapper>
+
+                <CardWrapper headerTitle="サポート">
+                    <CustomCard imgURL="./support.png" />
+                    <CustomCard imgURL="./support.png" />
+                    <CustomCard imgURL="./support.png" />
+                    <CustomCard imgURL="./support.png" />
+                    <CustomCard imgURL="./support.png" />
+                </CardWrapper>
             </div>
-            {/* <RightSidebar /> */}
         </>
     );
 }
