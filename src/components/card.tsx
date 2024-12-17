@@ -7,7 +7,7 @@ interface CardWrapperProps {
     description?: string;
 }
 
-export default function Card({ imgURL, description }: CardWrapperProps) {
+export default function CustomCard({ imgURL, description }: CardWrapperProps) {
     return (
         <div className="py-[4rem] tablet:px-[18rem] px-[6rem] w-auto flex flex-col items-center laptop:mx-[10rem] tablet:mx-[10rem] mx-[6rem] tablet:my-[14rem] my-[8rem] shadow-lg hover:shadow-xl transition-shadow duration-300 hover:shadow-green-200/30 rounded-[8rem]">
             <div className="imageWrapper rounded-[8rem] w-[96%] h-[96%]">
