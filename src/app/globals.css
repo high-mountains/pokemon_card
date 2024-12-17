@@ -4,7 +4,6 @@
 @tailwind utilities;
 
 :root {
-  /* font-family: 'Noto Sans JP', sans-serif; */
 }
 
 html {
@@ -50,7 +49,6 @@ body {
 
 main {
   max-width: 1024px;
-  /* background-color: #bee373; */
   margin: 0 auto;
   position: relative;
 
@@ -62,7 +60,6 @@ main {
 .showMe {
   display: flex;
   transition: all 0.3s ease-in-out;
-  /* right: 0; */
 }
 
 .hiddenMe {

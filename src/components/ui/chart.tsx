@@ -12,7 +12,6 @@ export interface ChartConfig {
 
 export function ChartContainer({ 
   children, 
-  config 
 }: { 
   children: React.ReactNode;
   config?: ChartConfig;  // Make config optional
@@ -34,10 +33,9 @@ export function ChartTooltip({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function ChartTooltipContent({ hideLabel = false }: { hideLabel?: boolean }) {
+export function ChartTooltipContent() {
   return (
     <TooltipContent>
-      {/* Tooltip content implementation */}
     </TooltipContent>
   )
 } 
