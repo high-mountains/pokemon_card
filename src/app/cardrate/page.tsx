@@ -194,10 +194,10 @@ export default function Page() {
                 <div>
                     <div className="flex items-center justify-between mb-[4rem]">
                         <p className="text-[24rem]">カード採用率</p>
-                        <FaSearch
+                        {/* <FaSearch
                             className="w-[20rem] h-[20rem]"
                             onClick={handleSearchClick}
-                        />
+                        /> */}
                     </div>
                     <TimePeriod />
                 </div>
@@ -330,6 +330,8 @@ export default function Page() {
                 </CardWrapper>
 
                 <CardWrapper headerTitle="どうぐ">
+                    <CustomCard imgURL="/dogs.png" />
+                    <CustomCard imgURL="/dogs.png" />
                     <CustomCard imgURL="/dogs.png" />
                     <CustomCard imgURL="/dogs.png" />
                     <CustomCard imgURL="/dogs.png" />
