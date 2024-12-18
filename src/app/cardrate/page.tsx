@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/chart";
 // ==================SHADCN END==================
 
-import CustomCard from "@/components/card";
+import CustomCard from "@/components/customCard";
 import TimePeriod from "@/components/timePeriod";
 import CardWrapper from "@/components/cardWrapper";
 
