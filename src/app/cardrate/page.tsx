@@ -261,88 +261,88 @@ export default function Page() {
 
                 <CardWrapper headerTitle="ACE SPEC">
                     <CustomCard
-                        imgURL="./01.png"
+                        imgURL="/01.png"
                         description="アンフェアスタンプ(ACE SPEC)"
                     />
                     <CustomCard
-                        imgURL="./02.png"
+                        imgURL="/02.png"
                         description="プライムキャッチャー(ACE SPEC)"
                     />
                     <CustomCard
-                        imgURL="./03.png"
+                        imgURL="/03.png"
                         description="シークレットボックス(ACE SPEC)"
                     />
                     <CustomCard
-                        imgURL="./04.png"
+                        imgURL="/04.png"
                         description="偉大な大樹(ACE SPEC)"
                     />
                     <CustomCard
-                        imgURL="./02.png"
+                        imgURL="/02.png"
                         description="プライムキャッチャー(ACE SPEC)"
                     />
                     <CustomCard
-                        imgURL="./04.png"
+                        imgURL="/04.png"
                         description="アクロマの実験"
                     />
                     <CustomCard
-                        imgURL="./01.png"
+                        imgURL="/01.png"
                         description="アンフェアスタンプ(ACE SPEC)"
                     />
                     <CustomCard
-                        imgURL="./03.png"
+                        imgURL="/03.png"
                         description="シークレットボックス(ACE SPEC)"
                     />
                     <CustomCard
-                        imgURL="./03.png"
+                        imgURL="/03.png"
                         description="シークレットボックス(ACE SPEC)"
                     />
                     <CustomCard
-                        imgURL="./01.png"
+                        imgURL="/01.png"
                         description="アンフェアスタンプ(ACE SPEC)"
                     />
                     <CustomCard
-                        imgURL="./02.png"
+                        imgURL="/02.png"
                         description="プライムキャッチャー(ACE SPEC)"
                     />
                     <CustomCard
-                        imgURL="./04.png"
+                        imgURL="/04.png"
                         description="アクロマの実験"
                     />
                     <CustomCard
-                        imgURL="./04.png"
+                        imgURL="/04.png"
                         description="アクロマの実験"
                     />
                 </CardWrapper>
 
                 <CardWrapper headerTitle="ポケモン">
-                    <CustomCard imgURL="./dummy1.png" />
-                    <CustomCard imgURL="./dummy1.png" />
-                    <CustomCard imgURL="./dummy1.png" />
-                    <CustomCard imgURL="./dummy1.png" />
+                    <CustomCard imgURL="/dummy1.png" />
+                    <CustomCard imgURL="/dummy1.png" />
+                    <CustomCard imgURL="/dummy1.png" />
+                    <CustomCard imgURL="/dummy1.png" />
                 </CardWrapper>
 
                 <CardWrapper headerTitle="グッズ">
-                    <CustomCard imgURL="./goods.png" />
-                    <CustomCard imgURL="./goods.png" />
-                    <CustomCard imgURL="./goods.png" />
-                    <CustomCard imgURL="./goods.png" />
-                    <CustomCard imgURL="./goods.png" />
+                    <CustomCard imgURL="/goods.png" />
+                    <CustomCard imgURL="/goods.png" />
+                    <CustomCard imgURL="/goods.png" />
+                    <CustomCard imgURL="/goods.png" />
+                    <CustomCard imgURL="/goods.png" />
                 </CardWrapper>
 
                 <CardWrapper headerTitle="どうぐ">
-                    <CustomCard imgURL="./dogs.png" />
-                    <CustomCard imgURL="./dogs.png" />
-                    <CustomCard imgURL="./dogs.png" />
-                    <CustomCard imgURL="./dogs.png" />
-                    <CustomCard imgURL="./dogs.png" />
+                    <CustomCard imgURL="/dogs.png" />
+                    <CustomCard imgURL="/dogs.png" />
+                    <CustomCard imgURL="/dogs.png" />
+                    <CustomCard imgURL="/dogs.png" />
+                    <CustomCard imgURL="/dogs.png" />
                 </CardWrapper>
 
                 <CardWrapper headerTitle="サポート">
-                    <CustomCard imgURL="./support.png" />
-                    <CustomCard imgURL="./support.png" />
-                    <CustomCard imgURL="./support.png" />
-                    <CustomCard imgURL="./support.png" />
-                    <CustomCard imgURL="./support.png" />
+                    <CustomCard imgURL="/support.png" />
+                    <CustomCard imgURL="/support.png" />
+                    <CustomCard imgURL="/support.png" />
+                    <CustomCard imgURL="/support.png" />
+                    <CustomCard imgURL="/support.png" />
                 </CardWrapper>
             </div>
         </>
