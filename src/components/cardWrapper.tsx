@@ -27,7 +27,7 @@ const CardWrapper: React.FC<CardWrapperProps> = ({
 
   return (
     <div className="flex flex-col" style={{ flexFlow: "row wrap" }}>
-      <h2 className="text-2xl font-bold w-full bg-gray-400 pl-3">{headerTitle}</h2>
+      <h2 className="text-[24rem] font-bold w-full bg-gray-400 pl-[12rem]">{headerTitle}</h2>
       <div
         className={`grid grid-cols-2 sp:grid-cols-3 laptop:grid-cols-4 desktop:grid-cols-4 ${className}`}
       >
