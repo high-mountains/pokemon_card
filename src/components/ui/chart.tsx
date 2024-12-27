@@ -12,30 +12,36 @@ export interface ChartConfig {
 
 export function ChartContainer({ 
   children, 
+  config 
 }: { 
   children: React.ReactNode;
-  config?: ChartConfig;  // Make config optional
+  config: ChartConfig;  // Make config required since it's used in the chart
 }) {
   return (
-    <div className="h-[350px] w-full">
-      {children}
-    </div>
+    <TooltipProvider>
+      <div className="h-[350px] w-full">
+        {children}
+      </div>
+    </TooltipProvider>
   )
 }
 
 export function ChartTooltip({ children }: { children: React.ReactNode }) {
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger>{children}</TooltipTrigger>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger>{children}</TooltipTrigger>
+    </Tooltip>
   )
 }
 
-export function ChartTooltipContent() {
+interface ChartTooltipContentProps {
+  hideLabel?: boolean;
+}
+
+export function ChartTooltipContent({ hideLabel }: ChartTooltipContentProps) {
   return (
     <TooltipContent>
+      {/* Add your tooltip content here */}
     </TooltipContent>
   )
 } 

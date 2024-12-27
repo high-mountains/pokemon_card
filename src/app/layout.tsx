@@ -8,7 +8,7 @@ import Header from "@/components/header";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
-      <html lang="jp">
+      <html lang="en">
         <body>
           <Header />
           <main>
