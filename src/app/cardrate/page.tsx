@@ -14,21 +14,21 @@ import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
 
 import {
     Card,
-    CardContent,
+    CardContent
 } from "../../components/ui/card";
 
 const ChartContainer = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartContainer), {
   ssr: false
 });
-const ChartTooltip = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartTooltip), {
-  ssr: false
-});
-const ChartTooltipContent = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartTooltipContent), {
-  ssr: false
-});
+// const ChartTooltip = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartTooltip), {
+//   ssr: false
+// });
+// const ChartTooltipContent = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartTooltipContent), {
+//   ssr: false
+// });
 
 import {
-    ChartConfig,
+    ChartConfig
 } from "@/components/ui/chart";
 // ==================SHADCN END==================
 
@@ -46,13 +46,13 @@ const chartData = [
     { month: "グッズ", desktop: 37 },
     { month: "どうぐ", desktop: 73 },    
     { month: "サポート", desktop: 54 },
-    { month: "ポケモン", desktop: 14 },
+    { month: "ポケモン", desktop: 14 }
 ];
   const chartConfig = {
     desktop: {
       label: "Desktop",
-      color: "hsl(var(--chart-1))",
-    },
+      color: "hsl(var(--chart-5))"
+    }
   } satisfies ChartConfig
 
 export default function Page() {
@@ -243,9 +243,9 @@ export default function Page() {
                                         axisLine={false}
                                         tickLine={false}
                                     />
-                                    <ChartTooltip>
-                                        <ChartTooltipContent />
-                                    </ChartTooltip>
+                                    {/* <ChartTooltip> */}
+                                        {/* <ChartTooltipContent /> */}
+                                    {/* </ChartTooltip> */}
                                     <Bar
                                         dataKey="desktop"
                                         // fill="var(--color-desktop)"
