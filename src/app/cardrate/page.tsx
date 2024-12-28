@@ -1,32 +1,44 @@
 "use client";
 
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
-import { FaSearch } from "react-icons/fa";
-import { setSearchOpen } from "@/store/slices/cardSlice";
+// import { FaSearch } from "react-icons/fa";
+// import { setSearchOpen } from "@/store/slices/cardSlice";
 import { DatePicker, Select, Space } from "antd";
 import { SelectValue } from "antd/es/select";
+import dynamic from 'next/dynamic'
 
 // ==================SHADCN=================
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts";
 
 import {
     Card,
-    CardContent,
+    CardContent
 } from "../../components/ui/card";
 
+const ChartContainer = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartContainer), {
+  ssr: false
+});
+// const ChartTooltip = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartTooltip), {
+//   ssr: false
+// });
+// const ChartTooltipContent = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartTooltipContent), {
+//   ssr: false
+// });
+
 import {
-    ChartConfig,
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
+    ChartConfig
 } from "@/components/ui/chart";
 // ==================SHADCN END==================
 
-import CustomCard from "@/components/card";
+import CustomCard from "@/components/customCard";
 import TimePeriod from "@/components/timePeriod";
 import CardWrapper from "@/components/cardWrapper";
+
+// const Chart = dynamic(() => import('@/components/ui/chart'), {
+//   ssr: false
+// })
 
 const chartData = [
     { month: "ACESPEC", desktop: 86 },
@@ -34,26 +46,26 @@ const chartData = [
     { month: "グッズ", desktop: 37 },
     { month: "どうぐ", desktop: 73 },    
     { month: "サポート", desktop: 54 },
-    { month: "ポケモン", desktop: 14 },
+    { month: "ポケモン", desktop: 14 }
 ];
   const chartConfig = {
     desktop: {
       label: "Desktop",
-      color: "hsl(var(--chart-1))",
-    },
+      color: "hsl(var(--chart-5))"
+    }
   } satisfies ChartConfig
 
 export default function Page() {
-    const dispatch = useDispatch(); // Add dispatch
+    // const dispatch = useDispatch(); // Add dispatch
 
     const { market, totalTickets, selectedTickets, isSearchOpen } = useSelector(
         (state: RootState) => state.cardSlice
     );
 
-    const handleSearchClick = () => {
-        dispatch(setSearchOpen(!isSearchOpen)); // Toggle the current value
-        console.log("Hello, toogle ---->", isSearchOpen);
-    };
+    // const handleSearchClick = () => {
+    //     dispatch(setSearchOpen(!isSearchOpen)); // Toggle the current value
+    //     console.log("Hello, toogle ---->", isSearchOpen);
+    // };
 
     const handleChange = (value: SelectValue) => {
         console.log(`selected ${value}`);
@@ -122,7 +134,6 @@ export default function Page() {
                                                     value: "シニア",
                                                     label: "シニア",
                                                 },
-                                                //   { value: 'disabled', label: 'Disabled', disabled: true },
                                             ]}
                                         />
                                     </Space>
@@ -136,7 +147,7 @@ export default function Page() {
                                                 //   { value: '全て', label: '全て' },
                                                 {
                                                     value: "オープン",
-                                                    label: "���ープン",
+                                                    label: "オープン",
                                                 },
                                                 {
                                                     value: "マスタ",
@@ -179,7 +190,7 @@ export default function Page() {
                                                 },
                                                 {
                                                     value: "ネイティオ",
-                                                    label: "ネイテ��オ",
+                                                    label: "ネイティオ",
                                                 },
                                                 //   { value: 'disabled', label: 'Disabled', disabled: true },
                                             ]}
@@ -194,10 +205,6 @@ export default function Page() {
                 <div>
                     <div className="flex items-center justify-between mb-[4rem]">
                         <p className="text-[24rem]">カード採用率</p>
-                        <FaSearch
-                            className="w-[20rem] h-[20rem]"
-                            onClick={handleSearchClick}
-                        />
                     </div>
                     <TimePeriod />
                 </div>
@@ -236,9 +243,9 @@ export default function Page() {
                                         axisLine={false}
                                         tickLine={false}
                                     />
-                                    <ChartTooltip>
-                                        <ChartTooltipContent />
-                                    </ChartTooltip>
+                                    {/* <ChartTooltip> */}
+                                        {/* <ChartTooltipContent /> */}
+                                    {/* </ChartTooltip> */}
                                     <Bar
                                         dataKey="desktop"
                                         // fill="var(--color-desktop)"
@@ -253,8 +260,8 @@ export default function Page() {
                                             fontWeight={600}
                                         />
                                     </Bar>
-                                </BarChart>
-                            </ChartContainer>
+                                </BarChart> 
+                            </ChartContainer> 
                         </CardContent>
                     </Card>
                 </div>
@@ -298,7 +305,7 @@ export default function Page() {
                     />
                     <CustomCard
                         imgURL="/01.png"
-                        description="アンフェアスタンプ(ACE SPEC)"
+                        description="アン���ェアスタンプ(ACE SPEC)"
                     />
                     <CustomCard
                         imgURL="/02.png"
@@ -330,6 +337,8 @@ export default function Page() {
                 </CardWrapper>
 
                 <CardWrapper headerTitle="どうぐ">
+                    <CustomCard imgURL="/dogs.png" />
+                    <CustomCard imgURL="/dogs.png" />
                     <CustomCard imgURL="/dogs.png" />
                     <CustomCard imgURL="/dogs.png" />
                     <CustomCard imgURL="/dogs.png" />

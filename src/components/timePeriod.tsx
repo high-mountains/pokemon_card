@@ -6,9 +6,10 @@ import type { RootState } from '@/store/store';
 
 export default function TimePeriod() {
   const selectedPeriod = useSelector((state: RootState) => state.cardSlice.selectedPeriod);
+  //  className=" outline-solid outline-[1rem] outline-solid"
   return (
-    <div className=" outline-solid outline-[1rem] outline-solid">
-      <span className="text-[16rem] outline outline-[1rem] outline-solid w-auto px-[4rem] py-[4rem]">
+    <div>
+      <span className="text-[20rem] w-auto px-[4rem] py-[4rem]">
         {selectedPeriod}
       </span>
     </div>

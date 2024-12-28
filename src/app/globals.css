@@ -44,7 +44,7 @@ body {
   max-width: 1024px;
   margin: 0 auto;
   z-index: 2;
-  height: 40rem;
+  height: 50rem;
 }
 
 main {
@@ -94,6 +94,7 @@ main {
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --chart-6: 314 88% 55%;
     --radius: 0.5rem;
   }
   .dark {
