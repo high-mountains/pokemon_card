@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "@/store/store";
 import { DatePicker, Select, Space } from "antd";
 import { SelectValue } from "antd/es/select";
 import dynamic from 'next/dynamic';
 import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts";
 import { Card, CardContent } from "../../components/ui/card";
@@ -16,18 +17,13 @@ import CustomCard from "@/components/customCard";
 import TimePeriod from "@/components/timePeriod";
 import CardWrapper from "@/components/cardWrapper";
 
+import { setDateRange } from "@/store/slices/cardSlice";
+
 const ChartContainer = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartContainer), {
   ssr: false
 });
 
-const chartData = [
-    { month: "ACESPEC", desktop: 86 },
-    { month: "ポケモン", desktop: 60 },
-    { month: "グッズ", desktop: 37 },
-    { month: "どうぐ", desktop: 73 },
-    { month: "サポート", desktop: 54 },
-    { month: "ポケモン", desktop: 14 }
-];
+
 
 const chartConfig: ChartConfig = {
     desktop: {
@@ -36,57 +32,100 @@ const chartConfig: ChartConfig = {
     }
 };
 
-// API response and processed data types
-// interface ApiCard {
-//     id: number;
-//     date: Date;
-//     category: string;
-//     name: string;
-//     count: number;
-//     image: string;
-//     league: string;
-// }
-
 interface Card {
     id: number;
-    date: Date;
-    category: string;
-    name: string;
-    count: number;
-    image: string;
-    league: string;
+    date?: string | Date;
+    category?: string;
+    name?: string;
+    count?: number;
+    image?: string;
+    league?: string;
 }
 
 export default function Page() {
+    const dispatch = useDispatch();
+
+    const today = new Date();
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate() - 7);
+    const todayString = today.toISOString().split('T')[0];
+    const sevenDaysAgoString = sevenDaysAgo.toISOString().split('T')[0];
+    const initialToday = dayjs().subtract(0, 'days');
+    const initialSevenDaysAgo = dayjs().subtract(7, 'days');
+
     const [filterObj, setFilterObj] = useState({
-        league: "",
-        startDate: "",
-        endDate: "",
+        league: "オープン",
+        startDate: sevenDaysAgoString,
+        endDate: todayString,
     });
 
-    const { market, totalTickets, selectedTickets, isSearchOpen } = useSelector(
-        (state: RootState) => state.cardSlice
-    );
+    const initialChartData = [
+        { month: "ポケモン", desktop: 20 },
+        { month: "グッズ", desktop: 37 },
+        { month: "どうぐ", desktop: 73 },
+        { month: "サポート", desktop: 54 },
+        { month: "スタジアム", desktop: 14 },
+        { month: "エネルギー", desktop: 24 }
+    ];
+
+    const [tableData, setTableData] = useState(initialChartData);
+
+    const [filterConditionFlag] = useState(true);
 
     const [cards, setCards] = useState<Card[]>([]);
 
-    const selectElement = useRef();
     useEffect(() => {
-        const today = new Date();
+        let totalCount = 0;
+        let pokemonCount = 0;
+        let goodsCount = 0;
+        let douguCount = 0;
+        let supportCount = 0;
+        let stadiumCount = 0;
+        let energyCount = 0;
+
+        if(cards) {
+            console.log("cards======>", cards);
+            
+            cards.map((card) => {
+                totalCount += card.count || 0
+                if (card.category === "ポケモン") pokemonCount += card.count || 0
+                else if (card.category === "グッズ") goodsCount += card.count || 0
+                else if (card.category === "どうぐ") douguCount += card.count || 0
+                else if (card.category === "サポート") supportCount += card.count || 0
+                else if (card.category === "スタジアム") stadiumCount += card.count || 0
+                else if (card.category === "エネルギー") energyCount += card.count || 0
+            })
+        }
+        console.log("totalCount===>", totalCount)
+
+        if (totalCount > 0) {
+            const updatedData = initialChartData.map((item) => {
+                if (item.month === "ポケモン") return { ...item, desktop: parseFloat(((pokemonCount / totalCount) * 100).toFixed(1)) };
+                if (item.month === "グッズ") return { ...item, desktop: parseFloat(((goodsCount / totalCount) * 100).toFixed(1)) };
+                if (item.month === "どうぐ") return { ...item, desktop: parseFloat(((douguCount / totalCount) * 100).toFixed(1)) };
+                if (item.month === "サポート") return { ...item, desktop: parseFloat(((supportCount / totalCount) * 100).toFixed(1)) };
+                if (item.month === "スタジアム") return { ...item, desktop: parseFloat(((stadiumCount / totalCount) * 100).toFixed(1)) };
+                if (item.month === "エネルギー") return { ...item, desktop: parseFloat(((energyCount / totalCount) * 100).toFixed(1)) };
+                return item; // Default case if no match
+            });
     
-        // Get the date 7 days ago
-        const sevenDaysAgo = new Date(today);
-        sevenDaysAgo.setDate(today.getDate() - 7);
-    
-        // Convert both dates to string in the desired format (ISO string)
-        const todayString = today.toISOString().split('T')[0]; // yyyy-mm-dd
-        const sevenDaysAgoString = sevenDaysAgo.toISOString().split('T')[0]; // yyyy-mm-dd
-        
-        setFilterObj((prev) => ({ ...prev, startDate: todayString as string }))
-        setFilterObj((prev) => ({ ...prev, endDate: sevenDaysAgoString as string }))
-        console.log("Today: " + todayString);
-        console.log("7 Days Ago: " + sevenDaysAgoString);
-    }, [])
+            setTableData(updatedData); // Update the state with the new data
+        }
+    }, [cards])
+    // const { market, totalTickets, selectedTickets, isSearchOpen } = useSelector(
+    //     (state: RootState) => state.cardSlice
+    // );
+    const { isSearchOpen } = useSelector(
+        (state: RootState) => state.cardSlice
+    );
+
+
+    const warningRef = useRef<HTMLParagraphElement>(null);
+
+    useEffect(() => {
+        setFilterObj((prev) => ({ ...prev, startDate: sevenDaysAgoString as string }))
+        setFilterObj((prev) => ({ ...prev, endDate: todayString as string }))
+    })
 
     const fetchCards = async () => {
         try {
@@ -100,8 +139,8 @@ export default function Page() {
 
             if (response.ok) {
                 const data = await response.json();
-                // console.log(response)
-                setCards(data);
+                const filterdData = data[0];
+                setCards(filterdData);
             } else {
                 console.error('Error:', response.status, response.statusText);
             }
@@ -111,25 +150,40 @@ export default function Page() {
     };
 
     useEffect(() => {
-        console.log("filterObj==>", filterObj)
         fetchCards();
-    }, [filterObj]); // Only re-fetch data when filterObj changes
+        dispatch(setDateRange(filterObj))
+    }, [filterObj]);
 
     const handleChange = (value: SelectValue) => {
         setFilterObj(prev => ({
             ...prev,
-            league: value as string, // Make sure the value is treated as a string
+            league: value as string,
         }));
     };
 
-    const onChangeStartDate = (date: Dayjs | null, dateString: string) => {
-        setFilterObj(prev => ({ ...prev, startDate: dateString }));
+    const onChangeStartDate = (date: Dayjs | null, dateString: string | string[]) => {
+        setFilterObj(prev => ({
+            ...prev,
+            startDate: Array.isArray(dateString) ? dateString[0] : dateString
+        }));
     };
 
-    const onChangeEndDate = (date: Dayjs | null, dateString: string) => {
-        setFilterObj(prev => ({ ...prev, endDate: dateString }));
+    const onChangeEndDate = (date: Dayjs | null, dateString: string | string[]) => {
+        setFilterObj(prev => ({
+            ...prev,
+            endDate: Array.isArray(dateString) ? dateString[0] : dateString
+        }));
     };
 
+    const onHandleSearch = () => {
+        if(filterConditionFlag) {
+            fetchCards();
+        } else {
+            if (warningRef.current) {
+                warningRef.current.style.display = 'none';
+            }
+        }
+    }
     return (
         <>
             <div className="mb-[30rem] w-auto grow md:bg-red-400 px-[16rem] flex flex-col gap-[14rem]">
@@ -144,6 +198,7 @@ export default function Page() {
                                 <div className="flex flex-row items-center gap-[8rem]">
                                     <p className="text-[12rem] tablet:text-[18rem]">開始日:</p>
                                     <DatePicker
+                                        defaultValue={initialSevenDaysAgo}
                                         picker="date"
                                         className="tablet:w-[136rem] w-[120rem]"
                                         allowClear={false}
@@ -154,6 +209,7 @@ export default function Page() {
                                 <div className="flex flex-row items-center gap-[8rem]">
                                     <p className="text-[12rem] tablet:text-[18rem]">終了日:</p>
                                     <DatePicker
+                                        defaultValue={initialToday}
                                         picker="date"
                                         className="tablet:w-[136rem] w-[120rem]"
                                         allowClear={false}
@@ -173,6 +229,7 @@ export default function Page() {
                                             { value: "ジュニア", label: "ジュニア" },
                                             { value: "シニア", label: "シニア" },
                                         ]}
+                                        defaultValue="オープン"
                                     />
                                 </Space>
                                 <Space wrap>
@@ -201,12 +258,17 @@ export default function Page() {
                             </div>
                         </div>
                     </div>
+                    <div>
+                        <p className="text-[15rem] text-red-500 mt-[10rem] ml-[16rem]" ref={warningRef}>検索条件を正確に入力してください。</p>
+                    </div>
                 </div>
                 
                 <div>
+                    <button className="text-[20rem] bg-slate-900 text-white px-[12rem] py-[6rem] radius" onClick={onHandleSearch}>検索</button>
                     <p className="text-[24rem]">カード採用率</p>
                     <TimePeriod />
                 </div>
+
                 <hr className="my-[6rem]" />
 
                 <div>
@@ -220,7 +282,7 @@ export default function Page() {
                     <Card>
                         <CardContent>
                             <ChartContainer config={chartConfig}>
-                                <BarChart width={600} height={350} data={chartData}>
+                                <BarChart width={600} height={350} data={tableData}>
                                     <CartesianGrid vertical={false} />
                                     <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
                                     <YAxis domain={[0, 100]} axisLine={false} tickLine={false} />
@@ -233,29 +295,85 @@ export default function Page() {
                     </Card>
                 </div>
 
-                <CardWrapper headerTitle="ACE SPEC">
-                    {["01.png", "02.png", "03.png", "04.png"].map((img, idx) => (
-                        <CustomCard key={idx} imgURL={`/${img}`} description="カード詳細" />
+                <CardWrapper headerTitle="ポケモン">
+                    {cards
+                        .filter((item) => item.category === "ポケモン")
+                        .map((item, index) => (
+                            <CustomCard 
+                                key={index}
+                                categoryString={item.category || "Unknown Category"}
+                                name={item.name}
+                                count={item.count || 0}
+                                imgURL={item.image}/>
+                    ))}
+                </CardWrapper>
+                
+                <CardWrapper headerTitle="グッズ">
+                    {cards
+                        .filter((item) => item.category === "グッズ")
+                        .map((item, index) => (
+                            <CustomCard 
+                                key={index}
+                                categoryString={item.category || "Unknown Category"}
+                                name={item.name}
+                                count={item.count || 0}
+                                imgURL={item.image}/>
+                    ))}
+                </CardWrapper>
+                
+                <CardWrapper headerTitle="どうぐ">
+                    {cards
+                        .filter((item) => item.category === "どうぐ")
+                        .map((item, index) => (
+                            <CustomCard 
+                                key={index}
+                                categoryString={item.category || "Unknown Category"}
+                                name={item.name}
+                                count={item.count || 0}
+                                imgURL={item.image}/>
                     ))}
                 </CardWrapper>
 
-                <CardWrapper headerTitle="ポケモン">
-                    <CustomCard imgURL="/dummy1.png" />
-                    <CustomCard imgURL="/dummy1.png" />
-                </CardWrapper>
-
-                <CardWrapper headerTitle="グッズ">
-                    <CustomCard imgURL="/goods.png" />
-                    <CustomCard imgURL="/goods.png" />
-                </CardWrapper>
-
-                <CardWrapper headerTitle="どうぐ">
-                    <CustomCard imgURL="/dogs.png" />
-                </CardWrapper>
-
                 <CardWrapper headerTitle="サポート">
-                    <CustomCard imgURL="/support.png" />
+                    {cards
+                        .filter((item) => item.category === "サポート")
+                        .map((item, index) => (
+                            <CustomCard 
+                                key={index}
+                                categoryString={item.category || "Unknown Category"}
+                                name={item.name}
+                                count={item.count || 0}
+                                imgURL={item.image}/>
+                    ))}
                 </CardWrapper>
+
+                <CardWrapper headerTitle="スタジアム">
+                    {cards
+                        .filter((item) => item.category === "スタジアム")
+                        .map((item, index) => (
+                            <CustomCard 
+                                key={index}
+                                categoryString={item.category || "Unknown Category"}
+                                name={item.name}
+                                count={item.count || 0}
+                                imgURL={item.image}/>
+                    ))}
+                </CardWrapper>
+
+                <CardWrapper headerTitle="エネルギー">
+                    {cards
+                        .filter((item) => item.category === "エネルギー")
+                        .map((item, index) => (
+                            <CustomCard 
+                                key={index}
+                                categoryString={item.category || "Unknown Category"}
+                                name={item.name}
+                                count={item.count || 0}
+                                imgURL={item.image}/>
+                    ))}
+                </CardWrapper>
+
+              
             </div>
         </>
     );
