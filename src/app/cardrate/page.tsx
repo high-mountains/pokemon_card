@@ -130,7 +130,11 @@ export default function Page() {
 
     const fetchCards = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/cards', {
+            const apiUrl = process.env.NEXT_PUBLIC_BACKEND_DATABASE;
+            console.log("apiUrl===>", apiUrl);
+            // const response = await fetch(`${apiUrl}/api/cards`, {
+            const response = await fetch(`${apiUrl}/api/cards`, {
+            // const response = await fetch('http://localhost:5000/api/cards', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
