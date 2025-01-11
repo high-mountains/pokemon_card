@@ -332,7 +332,7 @@ export default function Page() {
                 
                 <CardWrapper headerTitle="どうぐ">
                     {cards
-                        .filter((item) => item.category === "どうぐ")
+                        .filter((item) => item.category === "ポケモンのどうぐ")
                         .map((item, index) => (
                             <CustomCard
                                 key={index}
