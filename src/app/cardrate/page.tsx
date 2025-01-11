@@ -23,8 +23,6 @@ const ChartContainer = dynamic(() => import('@/components/ui/chart').then(mod =>
   ssr: false
 });
 
-
-
 const chartConfig: ChartConfig = {
     desktop: {
         label: "Desktop",
@@ -37,9 +35,12 @@ interface Card {
     date?: string | Date;
     category?: string;
     name?: string;
-    count?: number;
+    count?: number | string;
     image?: string;
     league?: string;
+    row_counts: string;
+    percentages: string;
+    total_row_count?: string;
 }
 
 export default function Page() {
@@ -69,32 +70,30 @@ export default function Page() {
     ];
 
     const [tableData, setTableData] = useState(initialChartData);
-
     const [filterConditionFlag] = useState(true);
-
     const [cards, setCards] = useState<Card[]>([]);
 
     useEffect(() => {
-        let totalCount = 0;
-        let pokemonCount = 0;
-        let goodsCount = 0;
-        let douguCount = 0;
-        let supportCount = 0;
-        let stadiumCount = 0;
-        let energyCount = 0;
+        const totalCount = 0;
+        const pokemonCount = 0;
+        const goodsCount = 0;
+        const douguCount = 0;
+        const supportCount = 0;
+        const stadiumCount = 0;
+        const energyCount = 0;
 
         if(cards) {
             console.log("cards======>", cards);
             
-            cards.map((card) => {
-                totalCount += card.count || 0
-                if (card.category === "ポケモン") pokemonCount += card.count || 0
-                else if (card.category === "グッズ") goodsCount += card.count || 0
-                else if (card.category === "どうぐ") douguCount += card.count || 0
-                else if (card.category === "サポート") supportCount += card.count || 0
-                else if (card.category === "スタジアム") stadiumCount += card.count || 0
-                else if (card.category === "エネルギー") energyCount += card.count || 0
-            })
+            // cards.map((card) => {
+            //     totalCount += card. || 0
+            //     if (card.category === "ポケモン") pokemonCount += card. || 0
+            //     else if (card.category === "グッズ") goodsCount += card. || 0
+            //     else if (card.category === "どうぐ") douguCount += card. || 0
+            //     else if (card.category === "サポート") supportCount += card. || 0
+            //     else if (card.category === "スタジアム") stadiumCount += card. || 0
+            //     else if (card.category === "エネルギー") energyCount += card. || 0
+            // })
         }
         console.log("totalCount===>", totalCount)
 
@@ -119,13 +118,12 @@ export default function Page() {
         (state: RootState) => state.cardSlice
     );
 
-
     const warningRef = useRef<HTMLParagraphElement>(null);
 
     useEffect(() => {
         setFilterObj((prev) => ({ ...prev, startDate: sevenDaysAgoString as string }))
         setFilterObj((prev) => ({ ...prev, endDate: todayString as string }))
-    })
+    }, [])
 
     const fetchCards = async () => {
         try {
@@ -137,9 +135,15 @@ export default function Page() {
                 body: JSON.stringify(filterObj)
             });
 
+            if (!response.ok) {
+                // console.error('Here is Error:', response.status, response.statusText);
+                return;
+            }
+
             if (response.ok) {
                 const data = await response.json();
                 const filterdData = data[0];
+                console.log("data====>", filterdData)
                 setCards(filterdData);
             } else {
                 console.error('Error:', response.status, response.statusText);
@@ -301,10 +305,12 @@ export default function Page() {
                         .map((item, index) => (
                             <CustomCard 
                                 key={index}
-                                categoryString={item.category || "Unknown Category"}
-                                name={item.name}
-                                count={item.count || 0}
-                                imgURL={item.image}/>
+                                // categoryString={item.category || "Unknown Category"}
+                                rowCounts={item.row_counts}
+                                // count={item.total_row_count && item.total_row_count}
+                                percentages={item.percentages}
+                                imgURL={item.image}
+                                name={item.name}/>
                     ))}
                 </CardWrapper>
                 
@@ -314,23 +320,28 @@ export default function Page() {
                         .map((item, index) => (
                             <CustomCard 
                                 key={index}
-                                categoryString={item.category || "Unknown Category"}
-                                name={item.name}
-                                count={item.count || 0}
-                                imgURL={item.image}/>
+                                // categoryString={item.category || "Unknown Category"}
+                                rowCounts={item.row_counts}
+                                // count={item.total_row_count && item.total_row_count}
+                                percentages={item.percentages}
+                                imgURL={item.image}
+                                name={item.name}/>
                     ))}
+                   
                 </CardWrapper>
                 
                 <CardWrapper headerTitle="どうぐ">
                     {cards
                         .filter((item) => item.category === "どうぐ")
                         .map((item, index) => (
-                            <CustomCard 
+                            <CustomCard
                                 key={index}
-                                categoryString={item.category || "Unknown Category"}
-                                name={item.name}
-                                count={item.count || 0}
-                                imgURL={item.image}/>
+                                // categoryString={item.category || "Unknown Category"}
+                                rowCounts={item.row_counts}
+                                // count={item.total_row_count && item.total_row_count}
+                                percentages={item.percentages}
+                                imgURL={item.image}
+                                name={item.name}/>
                     ))}
                 </CardWrapper>
 
@@ -338,12 +349,14 @@ export default function Page() {
                     {cards
                         .filter((item) => item.category === "サポート")
                         .map((item, index) => (
-                            <CustomCard 
+                            <CustomCard
                                 key={index}
-                                categoryString={item.category || "Unknown Category"}
-                                name={item.name}
-                                count={item.count || 0}
-                                imgURL={item.image}/>
+                                // categoryString={item.category || "Unknown Category"}
+                                rowCounts={item.row_counts}
+                                // count={item.total_row_count && item.total_row_count}
+                                percentages={item.percentages}
+                                imgURL={item.image}
+                                name={item.name}/>
                     ))}
                 </CardWrapper>
 
@@ -353,10 +366,12 @@ export default function Page() {
                         .map((item, index) => (
                             <CustomCard 
                                 key={index}
-                                categoryString={item.category || "Unknown Category"}
-                                name={item.name}
-                                count={item.count || 0}
-                                imgURL={item.image}/>
+                                // categoryString={item.category || "Unknown Category"}
+                                rowCounts={item.row_counts}
+                                // count={item.total_row_count && item.total_row_count}
+                                percentages={item.percentages}
+                                imgURL={item.image}
+                                name={item.name}/>
                     ))}
                 </CardWrapper>
 
@@ -364,16 +379,16 @@ export default function Page() {
                     {cards
                         .filter((item) => item.category === "エネルギー")
                         .map((item, index) => (
-                            <CustomCard 
+                            <CustomCard
                                 key={index}
-                                categoryString={item.category || "Unknown Category"}
-                                name={item.name}
-                                count={item.count || 0}
-                                imgURL={item.image}/>
+                                // categoryString={item.category || "Unknown Category"}
+                                rowCounts={item.row_counts}
+                                // count={item.total_row_count && item.total_row_count}
+                                percentages={item.percentages}
+                                imgURL={item.image}
+                                name={item.name}/>
                     ))}
                 </CardWrapper>
-
-              
             </div>
         </>
     );

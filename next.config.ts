@@ -2,7 +2,14 @@ import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['www.pokemon-card.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.pokemon-card.com',
+        pathname: '/assets/images/card_images/large/**',
+      },
+    ],
+    minimumCacheTTL: 30, // Cache images for 60 seconds
   },
 };
 
