@@ -149,7 +149,7 @@ export default function Page() {
                 console.error('Error:', response.status, response.statusText);
             }
         } catch (error) {
-            console.error('Fetch error:', error instanceof Error ? error.message : error);
+            // console.error('Fetch error:', error instanceof Error ? error.message : error);
         }
     };
 
