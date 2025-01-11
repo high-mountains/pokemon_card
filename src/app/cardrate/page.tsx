@@ -98,7 +98,7 @@ export default function Page() {
         console.log("totalCount===>", totalCount)
 
         if (totalCount > 0) {
-            const updatedData = initialChartData.map((item) => {
+            const updatedData = initialChartData && initialChartData.map((item) => {
                 if (item.month === "ポケモン") return { ...item, desktop: parseFloat(((pokemonCount / totalCount) * 100).toFixed(1)) };
                 if (item.month === "グッズ") return { ...item, desktop: parseFloat(((goodsCount / totalCount) * 100).toFixed(1)) };
                 if (item.month === "どうぐ") return { ...item, desktop: parseFloat(((douguCount / totalCount) * 100).toFixed(1)) };
@@ -121,9 +121,12 @@ export default function Page() {
     const warningRef = useRef<HTMLParagraphElement>(null);
 
     useEffect(() => {
-        setFilterObj((prev) => ({ ...prev, startDate: sevenDaysAgoString as string }))
-        setFilterObj((prev) => ({ ...prev, endDate: todayString as string }))
-    }, [])
+        setFilterObj((prev) => ({
+            ...prev,
+            startDate: sevenDaysAgoString as string,
+            endDate: todayString as string,
+        }));
+    }, []);
 
     const fetchCards = async () => {
         try {
@@ -149,6 +152,7 @@ export default function Page() {
                 console.error('Error:', response.status, response.statusText);
             }
         } catch (error) {
+            console.log(error);
             // console.error('Fetch error:', error instanceof Error ? error.message : error);
         }
     };
@@ -157,6 +161,7 @@ export default function Page() {
         fetchCards();
         dispatch(setDateRange(filterObj))
     }, [filterObj]);
+    // }, [filterObj, dispatch, fetchCards]);
 
     const handleChange = (value: SelectValue) => {
         setFilterObj(prev => ({
