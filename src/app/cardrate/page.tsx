@@ -1,220 +1,284 @@
 "use client";
 
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "@/store/store";
-// import { FaSearch } from "react-icons/fa";
-// import { setSearchOpen } from "@/store/slices/cardSlice";
 import { DatePicker, Select, Space } from "antd";
 import { SelectValue } from "antd/es/select";
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
-// ==================SHADCN=================
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts";
-
-import {
-    Card,
-    CardContent
-} from "../../components/ui/card";
-
-const ChartContainer = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartContainer), {
-  ssr: false
-});
-// const ChartTooltip = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartTooltip), {
-//   ssr: false
-// });
-// const ChartTooltipContent = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartTooltipContent), {
-//   ssr: false
-// });
-
-import {
-    ChartConfig
-} from "@/components/ui/chart";
-// ==================SHADCN END==================
+import { Card, CardContent } from "../../components/ui/card";
+import { ChartConfig } from "@/components/ui/chart";
 
 import CustomCard from "@/components/customCard";
 import TimePeriod from "@/components/timePeriod";
 import CardWrapper from "@/components/cardWrapper";
 
-// const Chart = dynamic(() => import('@/components/ui/chart'), {
-//   ssr: false
-// })
+import { setDateRange } from "@/store/slices/cardSlice";
 
-const chartData = [
-    { month: "ACESPEC", desktop: 86 },
-    { month: "ポケモン", desktop: 60 },
-    { month: "グッズ", desktop: 37 },
-    { month: "どうぐ", desktop: 73 },    
-    { month: "サポート", desktop: 54 },
-    { month: "ポケモン", desktop: 14 }
-];
-  const chartConfig = {
+const ChartContainer = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartContainer), {
+  ssr: false
+});
+
+const chartConfig: ChartConfig = {
     desktop: {
-      label: "Desktop",
-      color: "hsl(var(--chart-5))"
+        label: "Desktop",
+        color: "hsl(var(--chart-5))"
     }
-  } satisfies ChartConfig
+};
+
+interface Card {
+    id: number;
+    date?: string | Date;
+    category?: string;
+    name?: string;
+    count?: number | string;
+    image?: string;
+    league?: string;
+    row_counts: string;
+    percentages: string;
+    total_row_count?: string;
+}
 
 export default function Page() {
-    // const dispatch = useDispatch(); // Add dispatch
+    const dispatch = useDispatch();
 
-    const { market, totalTickets, selectedTickets, isSearchOpen } = useSelector(
+    const today = new Date();
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate() - 7);
+    const todayString = today.toISOString().split('T')[0];
+    const sevenDaysAgoString = sevenDaysAgo.toISOString().split('T')[0];
+    const initialToday = dayjs().subtract(0, 'days');
+    const initialSevenDaysAgo = dayjs().subtract(7, 'days');
+
+    const [filterObj, setFilterObj] = useState({
+        league: "オープン",
+        startDate: sevenDaysAgoString,
+        endDate: todayString,
+    });
+
+    const initialChartData = [
+        { month: "ポケモン", desktop: 20 },
+        { month: "グッズ", desktop: 37 },
+        { month: "どうぐ", desktop: 73 },
+        { month: "サポート", desktop: 54 },
+        { month: "スタジアム", desktop: 14 },
+        { month: "エネルギー", desktop: 24 }
+    ];
+
+    const [tableData, setTableData] = useState(initialChartData);
+    const [filterConditionFlag] = useState(true);
+    const [cards, setCards] = useState<Card[]>([]);
+
+    useEffect(() => {
+        const totalCount = 0;
+        const pokemonCount = 0;
+        const goodsCount = 0;
+        const douguCount = 0;
+        const supportCount = 0;
+        const stadiumCount = 0;
+        const energyCount = 0;
+
+        if(cards) {
+            console.log("cards======>", cards);
+            
+            // cards.map((card) => {
+            //     totalCount += card. || 0
+            //     if (card.category === "ポケモン") pokemonCount += card. || 0
+            //     else if (card.category === "グッズ") goodsCount += card. || 0
+            //     else if (card.category === "どうぐ") douguCount += card. || 0
+            //     else if (card.category === "サポート") supportCount += card. || 0
+            //     else if (card.category === "スタジアム") stadiumCount += card. || 0
+            //     else if (card.category === "エネルギー") energyCount += card. || 0
+            // })
+        }
+        console.log("totalCount===>", totalCount)
+
+        if (totalCount > 0) {
+            const updatedData = initialChartData.map((item) => {
+                if (item.month === "ポケモン") return { ...item, desktop: parseFloat(((pokemonCount / totalCount) * 100).toFixed(1)) };
+                if (item.month === "グッズ") return { ...item, desktop: parseFloat(((goodsCount / totalCount) * 100).toFixed(1)) };
+                if (item.month === "どうぐ") return { ...item, desktop: parseFloat(((douguCount / totalCount) * 100).toFixed(1)) };
+                if (item.month === "サポート") return { ...item, desktop: parseFloat(((supportCount / totalCount) * 100).toFixed(1)) };
+                if (item.month === "スタジアム") return { ...item, desktop: parseFloat(((stadiumCount / totalCount) * 100).toFixed(1)) };
+                if (item.month === "エネルギー") return { ...item, desktop: parseFloat(((energyCount / totalCount) * 100).toFixed(1)) };
+                return item; // Default case if no match
+            });
+    
+            setTableData(updatedData); // Update the state with the new data
+        }
+    }, [cards])
+    // const { market, totalTickets, selectedTickets, isSearchOpen } = useSelector(
+    //     (state: RootState) => state.cardSlice
+    // );
+    const { isSearchOpen } = useSelector(
         (state: RootState) => state.cardSlice
     );
 
-    // const handleSearchClick = () => {
-    //     dispatch(setSearchOpen(!isSearchOpen)); // Toggle the current value
-    //     console.log("Hello, toogle ---->", isSearchOpen);
-    // };
+    const warningRef = useRef<HTMLParagraphElement>(null);
+
+    useEffect(() => {
+        setFilterObj((prev) => ({ ...prev, startDate: sevenDaysAgoString as string }))
+        setFilterObj((prev) => ({ ...prev, endDate: todayString as string }))
+    }, [])
+
+    const fetchCards = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/cards', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(filterObj)
+            });
+
+            if (!response.ok) {
+                // console.error('Here is Error:', response.status, response.statusText);
+                return;
+            }
+
+            if (response.ok) {
+                const data = await response.json();
+                const filterdData = data[0];
+                console.log("data====>", filterdData)
+                setCards(filterdData);
+            } else {
+                console.error('Error:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('Fetch error:', error instanceof Error ? error.message : error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCards();
+        dispatch(setDateRange(filterObj))
+    }, [filterObj]);
 
     const handleChange = (value: SelectValue) => {
-        console.log(`selected ${value}`);
+        setFilterObj(prev => ({
+            ...prev,
+            league: value as string,
+        }));
     };
+
+    const onChangeStartDate = (date: Dayjs | null, dateString: string | string[]) => {
+        setFilterObj(prev => ({
+            ...prev,
+            startDate: Array.isArray(dateString) ? dateString[0] : dateString
+        }));
+    };
+
+    const onChangeEndDate = (date: Dayjs | null, dateString: string | string[]) => {
+        setFilterObj(prev => ({
+            ...prev,
+            endDate: Array.isArray(dateString) ? dateString[0] : dateString
+        }));
+    };
+
+    const onHandleSearch = () => {
+        if(filterConditionFlag) {
+            fetchCards();
+        } else {
+            if (warningRef.current) {
+                warningRef.current.style.display = 'none';
+            }
+        }
+    }
     return (
         <>
             <div className="mb-[30rem] w-auto grow md:bg-red-400 px-[16rem] flex flex-col gap-[14rem]">
                 <div className="flex flex-col">
                     <h3 className="text-[24rem]">検索条件</h3>
-                    <div>
-                        <div
-                            className={`h-auto w-[268rem] bg-white shadow-lg overflow-y-auto top-[30rem] 
-            tablet:${isSearchOpen ? "flex" : "hidden"}
-            ${isSearchOpen ? "showMe" : "hiddenMe"}
-            hidden
-            tablet:flex
-            gap-[8rem] px-[8rem] py-[16rem] transition-all duration-300 w-full`}
-                        >
-                            <div className="flex flex-col tablet:flex-row tablet:gap-[8rem] gap-[6rem]">
-                                <div className="flex flex-row gap-[8rem]">
-                                    <div className="flex flex-row items-center  gap-[8rem]">
-                                        <p className="text-[12rem] tablet:text-[18rem]">
-                                            開始日:
-                                        </p>
-                                        <DatePicker
-                                            picker="date"
-                                            className="tablet:w-[136rem] w-[120rem]"
-                                            allowClear={false}
-                                        />
-                                    </div>
-
-                                    <div className="flex flex-row items-center gap-[8rem]">
-                                        <p className="text-[12rem] tablet:text-[18rem]">
-                                            終了日:
-                                        </p>
-                                        <DatePicker
-                                            picker="date"
-                                            className="tablet:w-[136rem] w-[120rem]"
-                                            allowClear={false}
-                                        />
-                                    </div>
+                    <div className={`h-auto w-[268rem] bg-white shadow-lg overflow-y-auto top-[30rem] 
+                        tablet:${isSearchOpen ? "flex" : "hidden"} 
+                        ${isSearchOpen ? "showMe" : "hiddenMe"} hidden
+                        tablet:flex gap-[8rem] px-[8rem] py-[16rem] transition-all duration-300 w-full`}>
+                        <div className="flex flex-col tablet:flex-row tablet:gap-[8rem] gap-[6rem]">
+                            <div className="flex flex-row gap-[8rem]">
+                                <div className="flex flex-row items-center gap-[8rem]">
+                                    <p className="text-[12rem] tablet:text-[18rem]">開始日:</p>
+                                    <DatePicker
+                                        defaultValue={initialSevenDaysAgo}
+                                        picker="date"
+                                        className="tablet:w-[136rem] w-[120rem]"
+                                        allowClear={false}
+                                        onChange={onChangeStartDate}
+                                    />
                                 </div>
 
-                                <div className="flex flex-row gap-[8rem]">
-                                    <Space wrap>
-                                        <Select
-                                            prefix="全て"
-                                            // defaultValue="lucy"
-                                            style={{ width: "150rem" }}
-                                            onChange={handleChange}
-                                            options={[
-                                                //   { value: '全て', label: '全て' },
-                                                {
-                                                    value: "オープン",
-                                                    label: "オープン",
-                                                },
-                                                {
-                                                    value: "マスタ",
-                                                    label: "マスタ",
-                                                },
-                                                {
-                                                    value: "ジュニア",
-                                                    label: "ジュニア",
-                                                },
-                                                {
-                                                    value: "シニア",
-                                                    label: "シニア",
-                                                },
-                                            ]}
-                                        />
-                                    </Space>
-                                    <Space wrap>
-                                        <Select
-                                            prefix="カテゴリ 1"
-                                            // defaultValue="lucy"
-                                            style={{ width: "150rem" }}
-                                            onChange={handleChange}
-                                            options={[
-                                                //   { value: '全て', label: '全て' },
-                                                {
-                                                    value: "オープン",
-                                                    label: "オープン",
-                                                },
-                                                {
-                                                    value: "マスタ",
-                                                    label: "マスタ",
-                                                },
-                                                {
-                                                    value: "ジュニア",
-                                                    label: "ジュニア",
-                                                },
-                                                {
-                                                    value: "シニア",
-                                                    label: "シニア",
-                                                },
-                                                //   { value: 'disabled', label: 'Disabled', disabled: true },
-                                            ]}
-                                        />
-                                    </Space>
-                                    <Space wrap>
-                                        <Select
-                                            prefix="カテゴリ 2"
-                                            // defaultValue="未選択"
-                                            style={{ width: "150rem" }}
-                                            onChange={handleChange}
-                                            options={[
-                                                {
-                                                    value: "未選択",
-                                                    label: "未選択",
-                                                },
-                                                {
-                                                    value: "ドラパルト単",
-                                                    label: "ドラパルト単",
-                                                },
-                                                {
-                                                    value: "ボム",
-                                                    label: "ボム",
-                                                },
-                                                {
-                                                    value: "イバラ",
-                                                    label: "イバラ",
-                                                },
-                                                {
-                                                    value: "ネイティオ",
-                                                    label: "ネイティオ",
-                                                },
-                                                //   { value: 'disabled', label: 'Disabled', disabled: true },
-                                            ]}
-                                        />
-                                    </Space>
+                                <div className="flex flex-row items-center gap-[8rem]">
+                                    <p className="text-[12rem] tablet:text-[18rem]">終了日:</p>
+                                    <DatePicker
+                                        defaultValue={initialToday}
+                                        picker="date"
+                                        className="tablet:w-[136rem] w-[120rem]"
+                                        allowClear={false}
+                                        onChange={onChangeEndDate}
+                                    />
                                 </div>
                             </div>
+
+                            <div className="flex flex-row gap-[8rem]">
+                                <Space wrap>
+                                    <Select
+                                        style={{ width: "150rem" }}
+                                        onChange={handleChange}
+                                        options={[
+                                            { value: "オープン", label: "オープン" },
+                                            { value: "マスタ", label: "マスタ" },
+                                            { value: "ジュニア", label: "ジュニア" },
+                                            { value: "シニア", label: "シニア" },
+                                        ]}
+                                        defaultValue="オープン"
+                                    />
+                                </Space>
+                                <Space wrap>
+                                    <Select
+                                        style={{ width: "150rem" }}
+                                        options={[
+                                            { value: "オープン", label: "オープン" },
+                                            { value: "マスタ", label: "マスタ" },
+                                            { value: "ジュニア", label: "ジュニア" },
+                                            { value: "シニア", label: "シニア" },
+                                        ]}
+                                    />
+                                </Space>
+                                <Space wrap>
+                                    <Select
+                                        style={{ width: "150rem" }}
+                                        options={[
+                                            { value: "未選択", label: "未選択" },
+                                            { value: "ドラパルト単", label: "ドラパルト単" },
+                                            { value: "ボム", label: "ボム" },
+                                            { value: "イバラ", label: "イバラ" },
+                                            { value: "ネイティオ", label: "ネイティオ" },
+                                        ]}
+                                    />
+                                </Space>
+                            </div>
                         </div>
+                    </div>
+                    <div>
+                        <p className="text-[15rem] text-red-500 mt-[10rem] ml-[16rem]" ref={warningRef}>検索条件を正確に入力してください。</p>
                     </div>
                 </div>
                 
                 <div>
-                    <div className="flex items-center justify-between mb-[4rem]">
-                        <p className="text-[24rem]">カード採用率</p>
-                    </div>
+                    <button className="text-[20rem] bg-slate-900 text-white px-[12rem] py-[6rem] radius" onClick={onHandleSearch}>検索</button>
+                    <p className="text-[24rem]">カード採用率</p>
                     <TimePeriod />
                 </div>
+
                 <hr className="my-[6rem]" />
 
                 <div>
                     <p className="text-[24rem]">検索結果</p>
                     <p className="text-[16rem]">
-                        {market}会場 ● {totalTickets}デッキ中 {selectedTickets}
-                        デッキ
+                        {/* {market}会場 ● {totalTickets}デッキ中 {selectedTickets} デッキ */}
                     </p>
                 </div>
 
@@ -222,43 +286,12 @@ export default function Page() {
                     <Card>
                         <CardContent>
                             <ChartContainer config={chartConfig}>
-                                <BarChart
-                                    width={600}
-                                    height={350}
-                                    accessibilityLayer={true}
-                                    data={chartData}
-                                >
+                                <BarChart width={600} height={350} data={tableData}>
                                     <CartesianGrid vertical={false} />
-                                    <XAxis
-                                        dataKey="month"
-                                        tickLine={false}
-                                        tickMargin={10}
-                                        axisLine={false}
-                                        tickFormatter={(value) =>
-                                            value.slice(0, value.length)
-                                        }
-                                    />
-                                    <YAxis 
-                                        domain={[0, 100]} // Set min and max values: [min, max]
-                                        axisLine={false}
-                                        tickLine={false}
-                                    />
-                                    {/* <ChartTooltip> */}
-                                        {/* <ChartTooltipContent /> */}
-                                    {/* </ChartTooltip> */}
-                                    <Bar
-                                        dataKey="desktop"
-                                        // fill="var(--color-desktop)"
-                                        fill={chartConfig.desktop.color} 
-                                        radius={8}
-                                    >
-                                        <LabelList
-                                            position="top"
-                                            offset={12}
-                                            className="fill-foreground"
-                                            fontSize={12}
-                                            fontWeight={600}
-                                        />
+                                    <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                                    <YAxis domain={[0, 100]} axisLine={false} tickLine={false} />
+                                    <Bar dataKey="desktop" fill={chartConfig.desktop.color} radius={8}>
+                                        <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} fontWeight={600} />
                                     </Bar>
                                 </BarChart> 
                             </ChartContainer> 
@@ -266,92 +299,95 @@ export default function Page() {
                     </Card>
                 </div>
 
-                <CardWrapper headerTitle="ACE SPEC">
-                    <CustomCard
-                        imgURL="/01.png"
-                        description="アンフェアスタンプ(ACE SPEC)"
-                    />
-                    <CustomCard
-                        imgURL="/02.png"
-                        description="プライムキャッチャー(ACE SPEC)"
-                    />
-                    <CustomCard
-                        imgURL="/03.png"
-                        description="シークレットボックス(ACE SPEC)"
-                    />
-                    <CustomCard
-                        imgURL="/04.png"
-                        description="偉大な大樹(ACE SPEC)"
-                    />
-                    <CustomCard
-                        imgURL="/02.png"
-                        description="プライムキャッチャー(ACE SPEC)"
-                    />
-                    <CustomCard
-                        imgURL="/04.png"
-                        description="アクロマの実験"
-                    />
-                    <CustomCard
-                        imgURL="/01.png"
-                        description="アンフェアスタンプ(ACE SPEC)"
-                    />
-                    <CustomCard
-                        imgURL="/03.png"
-                        description="シークレットボックス(ACE SPEC)"
-                    />
-                    <CustomCard
-                        imgURL="/03.png"
-                        description="シークレットボックス(ACE SPEC)"
-                    />
-                    <CustomCard
-                        imgURL="/01.png"
-                        description="アン���ェアスタンプ(ACE SPEC)"
-                    />
-                    <CustomCard
-                        imgURL="/02.png"
-                        description="プライムキャッチャー(ACE SPEC)"
-                    />
-                    <CustomCard
-                        imgURL="/04.png"
-                        description="アクロマの実験"
-                    />
-                    <CustomCard
-                        imgURL="/04.png"
-                        description="アクロマの実験"
-                    />
-                </CardWrapper>
-
                 <CardWrapper headerTitle="ポケモン">
-                    <CustomCard imgURL="/dummy1.png" />
-                    <CustomCard imgURL="/dummy1.png" />
-                    <CustomCard imgURL="/dummy1.png" />
-                    <CustomCard imgURL="/dummy1.png" />
+                    {cards
+                        .filter((item) => item.category === "ポケモン")
+                        .map((item, index) => (
+                            <CustomCard 
+                                key={index}
+                                // categoryString={item.category || "Unknown Category"}
+                                rowCounts={item.row_counts}
+                                // count={item.total_row_count && item.total_row_count}
+                                percentages={item.percentages}
+                                imgURL={item.image}
+                                name={item.name}/>
+                    ))}
                 </CardWrapper>
-
+                
                 <CardWrapper headerTitle="グッズ">
-                    <CustomCard imgURL="/goods.png" />
-                    <CustomCard imgURL="/goods.png" />
-                    <CustomCard imgURL="/goods.png" />
-                    <CustomCard imgURL="/goods.png" />
-                    <CustomCard imgURL="/goods.png" />
+                    {cards
+                        .filter((item) => item.category === "グッズ")
+                        .map((item, index) => (
+                            <CustomCard 
+                                key={index}
+                                // categoryString={item.category || "Unknown Category"}
+                                rowCounts={item.row_counts}
+                                // count={item.total_row_count && item.total_row_count}
+                                percentages={item.percentages}
+                                imgURL={item.image}
+                                name={item.name}/>
+                    ))}
+                   
                 </CardWrapper>
-
+                
                 <CardWrapper headerTitle="どうぐ">
-                    <CustomCard imgURL="/dogs.png" />
-                    <CustomCard imgURL="/dogs.png" />
-                    <CustomCard imgURL="/dogs.png" />
-                    <CustomCard imgURL="/dogs.png" />
-                    <CustomCard imgURL="/dogs.png" />
-                    <CustomCard imgURL="/dogs.png" />
-                    <CustomCard imgURL="/dogs.png" />
+                    {cards
+                        .filter((item) => item.category === "どうぐ")
+                        .map((item, index) => (
+                            <CustomCard
+                                key={index}
+                                // categoryString={item.category || "Unknown Category"}
+                                rowCounts={item.row_counts}
+                                // count={item.total_row_count && item.total_row_count}
+                                percentages={item.percentages}
+                                imgURL={item.image}
+                                name={item.name}/>
+                    ))}
                 </CardWrapper>
 
                 <CardWrapper headerTitle="サポート">
-                    <CustomCard imgURL="/support.png" />
-                    <CustomCard imgURL="/support.png" />
-                    <CustomCard imgURL="/support.png" />
-                    <CustomCard imgURL="/support.png" />
-                    <CustomCard imgURL="/support.png" />
+                    {cards
+                        .filter((item) => item.category === "サポート")
+                        .map((item, index) => (
+                            <CustomCard
+                                key={index}
+                                // categoryString={item.category || "Unknown Category"}
+                                rowCounts={item.row_counts}
+                                // count={item.total_row_count && item.total_row_count}
+                                percentages={item.percentages}
+                                imgURL={item.image}
+                                name={item.name}/>
+                    ))}
+                </CardWrapper>
+
+                <CardWrapper headerTitle="スタジアム">
+                    {cards
+                        .filter((item) => item.category === "スタジアム")
+                        .map((item, index) => (
+                            <CustomCard 
+                                key={index}
+                                // categoryString={item.category || "Unknown Category"}
+                                rowCounts={item.row_counts}
+                                // count={item.total_row_count && item.total_row_count}
+                                percentages={item.percentages}
+                                imgURL={item.image}
+                                name={item.name}/>
+                    ))}
+                </CardWrapper>
+
+                <CardWrapper headerTitle="エネルギー">
+                    {cards
+                        .filter((item) => item.category === "エネルギー")
+                        .map((item, index) => (
+                            <CustomCard
+                                key={index}
+                                // categoryString={item.category || "Unknown Category"}
+                                rowCounts={item.row_counts}
+                                // count={item.total_row_count && item.total_row_count}
+                                percentages={item.percentages}
+                                imgURL={item.image}
+                                name={item.name}/>
+                    ))}
                 </CardWrapper>
             </div>
         </>
