@@ -31,7 +31,7 @@ export default function CustomCard({ imgURL, name, rowCounts, percentages }: Car
     }));
     return (
         <div
-            className="py-16 px-24 tablet:px-72 laptop:mx-40 tablet:mx-40 mx-24 tablet:my-56 my-32 w-auto flex flex-col items-center shadow-lg hover:shadow-xl transition-shadow duration-300 hover:shadow-green-400/80 rounded-32"
+            className="py-16 px-24 tablet:px-72 laptop:mx-40 tablet:mx-40 mx-24 tablet:my-56 my-32 w-auto flex flex-col items-center shadow-lg hover:shadow-xl transition-shadow duration-300 hover:shadow-green-400/80 rounded-[8rem]"
         >
             <div className="rounded-32 w-11/12 h-auto overflow-hidden">
                 <Image
