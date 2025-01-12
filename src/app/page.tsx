@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+// import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "@/store/store";
 import { DatePicker, Select, Space } from "antd";
@@ -15,7 +16,7 @@ import { ChartConfig } from "@/components/ui/chart";
 import { setDateRange } from "@/store/slices/cardSlice";
 
 import CustomCard from "@/components/customCard";
-import TimePeriod from "@/components/timePeriod";
+// import TimePeriod from "@/components/timePeriod";
 import CardWrapper from "@/components/cardWrapper";
 
 const ChartContainer = dynamic(() => import('@/components/ui/chart').then(mod => mod.ChartContainer), {
@@ -69,7 +70,7 @@ export default function Home() {
       ];
   
       const [tableData, setTableData] = useState(initialChartData);
-      const [filterConditionFlag] = useState(true);
+      // const [filterConditionFlag] = useState(true);
       const [cards, setCards] = useState<Card[]>([]);
   
       useEffect(() => {
@@ -117,7 +118,7 @@ export default function Home() {
           (state: RootState) => state.cardSlice
       );
   
-      const warningRef = useRef<HTMLParagraphElement>(null);
+      // const warningRef = useRef<HTMLParagraphElement>(null);
   
       useEffect(() => {
           setFilterObj((prev) => ({
@@ -187,15 +188,15 @@ export default function Home() {
           }));
       };
   
-      const onHandleSearch = () => {
-          if(filterConditionFlag) {
-              fetchCards();
-          } else {
-              if (warningRef.current) {
-                  warningRef.current.style.display = 'none';
-              }
-          }
-      }
+      // const onHandleSearch = () => {
+      //     if(filterConditionFlag) {
+      //         fetchCards();
+      //     } else {
+      //         if (warningRef.current) {
+      //             warningRef.current.style.display = 'none';
+      //         }
+      //     }
+      // }
 
   return (
       <div className="mb-[30rem] w-auto grow md:bg-red-400 px-[16rem] flex flex-col gap-[14rem]">
